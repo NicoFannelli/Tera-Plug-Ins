@@ -1,5 +1,23 @@
 module.exports = [
     {
+        "key": "autoLoot",
+        "name": "拾取脚本 - 自动触发(勾选) / 手动触发(取消)",
+        "type": "bool"
+    },
+    {
+        "key": "lootBlack",
+        "name": "拾取脚本 - 过滤拾取(勾选) / 全部拾取(取消)",
+        "type": "bool"
+    },
+    {
+        "key": "loopInterval",
+        "name": "拾取脚本 - 拾取间隔(单位ms)",
+        "type": "number",
+        "min": 350,
+        "max": 2000,
+        "step": 1
+    },
+    {
         "key": "cameraControl",
         "name": "镜头距离 - 自定义",
         "type": "bool"

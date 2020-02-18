@@ -26,18 +26,23 @@ module.exports = function Tera_Plug_Ins(mod) {
 		}
 	}
 	// Command /8
-	mod.command.add(["set", "设置", "設置"], () => { ui.show() })
+	mod.command.add("set", () => { ui.show() })
+	
+	mod.game.initialize('inventory');
 	
 	let myConsumables = []
 	let monsterIDList = new Map()
 	
 	mod.game.on('enter_game', () => {
+		lootRest()
 		myConsumables = []
 		monsterIDList.clear()
 		iCount = mod.setInterval(removeBodyBlock, 3000)
 	})
 	
 	mod.game.me.on('change_zone', (zone, quick) => {
+		lootRest()
+		
 		if (mod.settings.redirect && zone == 9714) {
 			mod.send('C_RESET_ALL_DUNGEON', 1, {})
 		}
@@ -177,9 +182,6 @@ module.exports = function Tera_Plug_Ins(mod) {
 		return false
 	})
 	
-	// AFKer
-	let lastTimeMoved = Date.now()
-	
 	mod.hook('C_PLAYER_LOCATION', 5, event => {
 		if ([0, 1, 5, 6].indexOf(event.type) > -1) {
 			lastTimeMoved = Date.now()
@@ -191,6 +193,9 @@ module.exports = function Tera_Plug_Ins(mod) {
 			dir: event.w
 		}
 	})
+	
+	// AFKer
+	let lastTimeMoved = Date.now()
 	
 	mod.hook('C_RETURN_TO_LOBBY', 1, event => {
 		if (mod.settings.afk) {
@@ -570,4 +575,100 @@ module.exports = function Tera_Plug_Ins(mod) {
 		}
 	}
 	
+	// Auto-Loot
+	let waitLoot = {},
+		loot = false,
+		loop = null
+	
+	mod.command.add(["loot", "拾取"], (arg) => {
+		if (!arg) {
+			MSG.chat(MSG.RED("请输入正确的参数!"))
+		} else {
+			var linkItemId = getItemIdChatLink(arg)
+			if (linkItemId) {
+				if (mod.settings.lootBlackList.includes(linkItemId)) {
+					mod.settings.lootBlackList.splice(mod.settings.lootBlackList.indexOf(linkItemId), 1)
+					MSG.chat(MSG.YEL("恢复拾取 - ") + MSG.TIP(linkItemId) + " " + getItemIdName(linkItemId))
+				} else {
+					mod.settings.lootBlackList.push(linkItemId)
+					MSG.chat(MSG.BLU("过滤拾取 - ") + MSG.TIP(linkItemId) + " " + getItemIdName(linkItemId))
+				}
+			} else {
+				MSG.chat(MSG.RED("输入的参数 无效!!"))
+			}
+		}
+	})
+	
+	mod.hook('S_SYSTEM_MESSAGE', 1, (event) => {
+		if (event.message == '@41') return false
+	})
+	
+	mod.hook('C_TRY_LOOT_DROPITEM', 4, (event) => {
+		if (!mod.settings.autoLoot && !loot) {
+			loot = true
+			loop = mod.setInterval(lootAll, mod.settings.loopInterval)
+		}
+	})
+	
+	mod.hook('S_SPAWN_DROPITEM', 8, (event) => {
+		waitLoot[event.gameId] = event
+		
+		if (mod.settings.autoLoot && !loot) {
+			loot = true
+			loop = mod.setInterval(lootAll, mod.settings.loopInterval)
+		}
+	})
+	
+	mod.hook('S_DESPAWN_DROPITEM', 4, (event) => {
+		if (event.gameId in waitLoot) {
+			delete waitLoot[event.gameId]
+		}
+	})
+	
+	function lootRest() {
+		waitLoot = {}
+		loot = false
+		mod.clearInterval(loop)
+	}
+	
+	function lootAll() {
+		if (mod.game.me.mounted) return
+		
+		var arr = Object.keys(waitLoot)
+		if (arr.length == 0) {
+			lootRest()
+		}
+		
+		for (let i in waitLoot) {
+			if (Math.abs(waitLoot[i].loc.x - location.pos.x) < 120 && Math.abs(waitLoot[i].loc.y - location.pos.y) < 120) {
+				if (mod.settings.lootBlack && mod.settings.lootBlackList.includes(waitLoot[i].item)) {
+					delete waitLoot[i]
+				} else {
+					mod.send('C_TRY_LOOT_DROPITEM', 4, {
+						gameId: waitLoot[i].gameId
+					})
+				}
+				return
+			}
+		}
+	}
+	
+	function getItemIdChatLink(chatLink) {
+		var id = chatLink.match(/#(\d*)@/)
+		if (id) {
+			return parseInt(id[1])
+		} else if (!isNaN(parseInt(chatLink))) {
+			return parseInt(chatLink)
+		} else {
+			return null
+		}
+	}
+	
+	function getItemIdName(id) {
+		if (mod.game.inventory.find(id)) {
+			return mod.game.inventory.find(id).data.name
+		} else {
+			return "自定义项目"
+		}
+	}
 }

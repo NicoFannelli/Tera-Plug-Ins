@@ -13,3 +13,15 @@
 # 命令
 
 !set
+
+# 过滤拾取 用法
+
+/8 频道键入
+
+loot [数字]
+
+![screenshot](https://github.com/tera-mod/Tera-Plug-Ins/blob/master/screenshot/04.png)
+
+loot [Shift+鼠标左键(背包物品)]
+
+![screenshot](https://github.com/tera-mod/Tera-Plug-Ins/blob/master/screenshot/05.png)
