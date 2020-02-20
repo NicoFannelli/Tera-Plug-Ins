@@ -4,7 +4,7 @@
 
 # 配置面板
 
-![screenshot](https://github.com/tera-mod/Tera-Plug-Ins/blob/master/screenshot/01.png)
+![screenshot](https://github.com/tera-mod/Tera-Plug-Ins/blob/master/screenshot/00.png)
 
 ![screenshot](https://github.com/tera-mod/Tera-Plug-Ins/blob/master/screenshot/02.png)
 
