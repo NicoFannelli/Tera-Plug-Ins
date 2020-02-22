@@ -10,7 +10,7 @@ module.exports = function Tera_Plug_Ins(mod) {
 		ui = new SettingsUI(mod, require('./settings_structure'), mod.settings, { height: 500 })
 		ui.on('update', settings => {
 			mod.settings = settings
-			
+			mod.clientInterface.configureCameraShake(mod.settings.shake, mod.settings.power, mod.settings.speed)
 			if (mod.settings.cameraControl) {
 				setCamera(mod.settings.setDistance)
 			} else {
@@ -29,6 +29,7 @@ module.exports = function Tera_Plug_Ins(mod) {
 	mod.command.add("set", () => { ui.show() })
 	
 	mod.game.initialize('inventory');
+	mod.clientInterface.configureCameraShake(mod.settings.shake, mod.settings.power, mod.settings.speed)
 	
 	let myConsumables = []
 	let monsterIDList = new Map()

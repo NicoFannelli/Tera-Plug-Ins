@@ -1,4 +1,7 @@
 const DefaultSettings = {
+    "shake": false,
+    "power": 1.0,
+    "speed": 1.0,
     "autoLoot": true,
     "lootBlack": true,
     "lootBlackList": [

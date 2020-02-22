@@ -19,7 +19,7 @@ module.exports = [
     },
     {
         "key": "cameraControl",
-        "name": "镜头距离 - 自定义",
+        "name": "镜头距离 - 自定义(勾选后生效)",
         "type": "bool"
     },
     {
@@ -29,6 +29,27 @@ module.exports = [
         "min": 500,
         "max": 2000,
         "step": 1
+    },
+    {
+        "key": "shake",
+        "name": "镜头抖动 - 自定义(不勾选则无晃动)",
+        "type": "bool"
+    },
+    {
+        "key": "power",
+        "name": "镜头抖动 - 晃动强度(少许延迟后生效)",
+        "type": "number",
+        "min": 0.0,
+        "max": 100.0,
+        "step": 0.25
+    },
+    {
+        "key": "speed",
+        "name": "镜头抖动 - 晃动频率(少许延迟后生效)",
+        "type": "number",
+        "min": 0.0,
+        "max": 100.0,
+        "step": 0.25
     },
     {
         "key": "vanguard",
