@@ -171,7 +171,6 @@ const DefaultSettings = {
     "sutsceneSkip": true,
     "socialAnimation": true,
     "artisanIcons": true,
-    "spawnMotes": true,
     "spawnMotesInfo": [
         // 恢复精气晶球 I-XV
         8008, 8009, 8010, 8011, 8012, 8013, 8014, 8015, 8016, 8017, 8018, 8019, 8020, 8021, 8022,
@@ -293,6 +292,7 @@ const DefaultSettings = {
     "noBodyBlock": true,
     "vanguard": true,
     "guildQuest": false,
+    "spawnMotes": false,
     "findItemID": false,
     "findMonsterID": false
 };

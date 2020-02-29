@@ -14,5 +14,5 @@
     "dependencies": {
         "tera-message": "https://raw.githubusercontent.com/tera-mod/tera-message/master/module.json"
     },
-    "version": "90.02"
+    "version": "91.04"
 }

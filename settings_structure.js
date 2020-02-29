@@ -132,11 +132,6 @@ module.exports = [
         "type": "bool"
     },
     {
-        "key": "spawnMotes",
-        "name": "精气晶球 - 屏蔽(元素)制造的球",
-        "type": "bool"
-    },
-    {
         "key": "spawnNPC",
         "name": "元素召唤 忍者圆木 哨兵塔 机器人 影子",
         "type": "bool"
@@ -184,6 +179,11 @@ module.exports = [
     {
         "key": "lockonYouMsg",
         "name": "显示 被锁定[绿字消息]",
+        "type": "bool"
+    },
+    {
+        "key": "spawnMotes",
+        "name": "精气晶球 - 屏蔽(元素)制造的球",
         "type": "bool"
     },
     {
