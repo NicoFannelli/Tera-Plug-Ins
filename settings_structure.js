@@ -1,7 +1,7 @@
 module.exports = [
     {
         "key": "autoLoot",
-        "name": "拾取脚本 - 自动触发(勾选) / 手动触发(取消)",
+        "name": "拾取脚本 - 开启(勾选) / 关闭(取消)",
         "type": "bool"
     },
     {

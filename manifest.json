@@ -1,9 +1,9 @@
 {
     "files": {
-        "index.js": "20496800e0182366d86e065a60f437df67bdf4b117852850e76179d84dcf99ee",
+        "index.js": "f0629cafe3a2a621f5af696cd5241eab98c096e7761d5136177277ec8f9cc0fc",
         "module.json": "acf3cd1e1961beb7ef7be63f7c19aac442b1b409b36fb4eeec243d00af806f2d",
         "settings_migrator.js": "9ba87b8e9e0708d78a528e54f2ff90a1b285ec1462a2ae4842f72766e40746a4",
-        "settings_structure.js": "8638ce0ba83003bd0e3a65ab434b69061b48749adab18579f18ff9cb306a9dc4"
+        "settings_structure.js": "502aa1cf7d006443b0bc69b223b841930fefa334cf369d4528b60bcef8c17289"
     },
     "defs": {
         "C_CANCEL_SKILL": 3,

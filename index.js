@@ -577,7 +577,7 @@ module.exports = function Tera_Plug_Ins(mod) {
 	}
 	
 	// Auto-Loot
-	let waitLoot = {},
+	let waitLoot = null,
 		loot = false,
 		loop = null
 	
@@ -605,7 +605,9 @@ module.exports = function Tera_Plug_Ins(mod) {
 	})
 	
 	mod.hook('C_TRY_LOOT_DROPITEM', 4, (event) => {
-		if (!mod.settings.autoLoot && !loot) {
+		if (!mod.settings.autoLoot) return
+		
+		if (!loot) {
 			loot = true
 			loop = mod.setInterval(lootAll, mod.settings.loopInterval)
 		}
@@ -613,8 +615,9 @@ module.exports = function Tera_Plug_Ins(mod) {
 	
 	mod.hook('S_SPAWN_DROPITEM', 8, (event) => {
 		waitLoot[event.gameId] = event
+		if (!mod.settings.autoLoot) return
 		
-		if (mod.settings.autoLoot && !loot) {
+		if (!loot) {
 			loot = true
 			loop = mod.setInterval(lootAll, mod.settings.loopInterval)
 		}
