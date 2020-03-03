@@ -73,17 +73,17 @@ module.exports = [
     },
     {
         "key": "flyMore",
-        "name": "无限能量 - 任意飞行器",
+        "name": "飞行能量 - 任意飞行器无限",
         "type": "bool"
     },
     {
         "key": "unLockFlying",
-        "name": "解锁飞行 - 空岛地图(需完成主线)",
+        "name": "飞行解锁 - 空岛地图(需完成主线)",
         "type": "bool"
     },
     {
         "key": "collectBalls",
-        "name": "自动吸球 - 飞行守护任务",
+        "name": "飞行守护 - 自动吸球",
         "type": "bool"
     },
     {
@@ -132,11 +132,6 @@ module.exports = [
         "type": "bool"
     },
     {
-        "key": "spawnNPC",
-        "name": "元素召唤 忍者圆木 哨兵塔 机器人 影子",
-        "type": "bool"
-    },
-    {
         "key": "archerTraps",
         "name": "显示PVP [弓箭]的陷阱位置",
         "type": "bool"
@@ -182,8 +177,13 @@ module.exports = [
         "type": "bool"
     },
     {
+        "key": "spawnNPC",
+        "name": "屏蔽 - 元素召唤 忍者圆木 哨兵塔 机器人 影子",
+        "type": "bool"
+    },
+    {
         "key": "spawnMotes",
-        "name": "精气晶球 - 屏蔽(元素)制造的球",
+        "name": "屏蔽 - 元素制造的 精气晶球",
         "type": "bool"
     },
     {

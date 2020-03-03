@@ -636,7 +636,7 @@ module.exports = function Tera_Plug_Ins(mod) {
 	}
 	
 	function lootAll() {
-		if (mod.game.me.mounted) return
+		if (mod.game.me.mounted || !location.pos) return
 		
 		var arr = Object.keys(waitLoot)
 		if (arr.length == 0) {
