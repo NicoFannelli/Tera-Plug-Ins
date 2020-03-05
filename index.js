@@ -35,7 +35,7 @@ module.exports = function Tera_Plug_Ins(mod) {
 	let monsterIDList = new Map()
 	
 	mod.game.on('enter_game', () => {
-		lootRest()
+		// lootRest()
 		myConsumables = []
 		monsterIDList.clear()
 		iCount = mod.setInterval(removeBodyBlock, 3000)
@@ -636,7 +636,7 @@ module.exports = function Tera_Plug_Ins(mod) {
 	}
 	
 	function lootAll() {
-		if (mod.game.me.mounted || !location.pos) return
+		if (mod.game.me.mounted || !location) return
 		
 		var arr = Object.keys(waitLoot)
 		if (arr.length == 0) {
