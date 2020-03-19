@@ -2,7 +2,7 @@
     "name": "Tera-Plug-Ins",
     "options": {
         "niceName": "插件合集",
-        "guiName": "Tera-Plug-Ins",
+        "guiName": "插件合集(Tera-Plug-Ins)",
         "settingsFile": "config.json",
         "settingsMigrator": "settings_migrator.js",
         "settingsVersion": 3
