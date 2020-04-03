@@ -1,9 +1,9 @@
 {
     "files": {
-        "index.js": "ba68505def98d7d8b75964138d4dc3add6594c5b3984b4c4c10b1df4a64591f4",
-        "module.json": "0aeb1b0f59b08c29eb5dc1f516de0d2de49f54541ff5532af22cdfafcf6fa522",
-        "settings_migrator.js": "9ba87b8e9e0708d78a528e54f2ff90a1b285ec1462a2ae4842f72766e40746a4",
-        "settings_structure.js": "d2fab3d40d0934c164e55ab6940b5a28fd31e78024271487bc1b73f9b74cc97d"
+        "index.js": "7314d5f14805beb86cc79179f8d43f20844e086f0daee370daed14ca79e827f4",
+        "module.json": "78df5e9f2049d61fdea6319d6c851706989c9c009650ea94578323da48cd8969",
+        "settings_migrator.js": "022397f8b6212d1ca88142a33c7216b12def2f52cf0e06fc404af53a6a2a0f9d",
+        "settings_structure.js": "361c2442fc74efa4c83326aa081bd21316423c47937594121704a55314b530cf"
     },
     "defs": {
         "C_CANCEL_SKILL": 3,
@@ -24,6 +24,7 @@
         "C_START_SKILL": 7,
         "C_TRY_LOOT_DROPITEM": 4,
         "C_TRY_NPC_INTERACTION": 1,
+        "C_USE_ITEM": 3,
         "S_ABNORMALITY_BEGIN": 4,
         "S_ABNORMALITY_END": 1,
         "S_ABNORMALITY_REFRESH": 2,
@@ -44,6 +45,8 @@
         "S_PLAY_MOVIE": 1,
         "S_REGISTER_ENCHANT_ITEM": 3,
         "S_REGISTER_EVOLUTION_ITEM": 3,
+        "S_REQUEST_DESPAWN_SERVANT": 1,
+        "S_REQUEST_SPAWN_SERVANT": 4,
         "S_SHOW_ITEM_TOOLTIP": 14,
         "S_SKILL_CATEGORY": 3,
         "S_SOCIAL": 1,
@@ -56,6 +59,7 @@
         "S_SYSTEM_MESSAGE": 1,
         "S_UNMOUNT_VEHICLE": 2,
         "S_UPDATE_GUILD_QUEST_STATUS": 1,
+        "S_UPDATE_SERVANT_INFO": 2,
         "S_USER_STATUS": 3
     }
 }

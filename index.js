@@ -28,7 +28,7 @@ module.exports = function Tera_Plug_Ins(mod) {
 	// Command /8
 	mod.command.add("set", () => { ui.show() })
 	
-	mod.game.initialize('inventory');
+	mod.game.initialize('inventory')
 	mod.clientInterface.configureCameraShake(mod.settings.shake, mod.settings.power, mod.settings.speed)
 	
 	let myConsumables = []
@@ -675,4 +675,42 @@ module.exports = function Tera_Plug_Ins(mod) {
 			return "自定义项目"
 		}
 	}
+	
+	// Auto-Servant
+	let myServant = null
+	mod.hook('S_REQUEST_SPAWN_SERVANT', 4, event => {
+		if (!mod.game.me.is(event.ownerId) || event.spawnType!=0) return
+		myServant = event
+	})
+	
+	mod.hook('S_REQUEST_DESPAWN_SERVANT', 1, event => {
+		if (!myServant || myServant.gameId!=event.gameId || event.despawnType!=0) return
+		myServant = null
+	})
+	
+	mod.hook('S_UPDATE_SERVANT_INFO', 2, event => {
+		if (!myServant || myServant.dbid!=event.dbid || myServant.id!=event.id) return
+		if (mod.settings.autoServant && event.energy/event.energyMax < mod.settings.servantUseAt/100) {
+			var useItem = null
+			if (useItem = mod.game.inventory.find(event.type ? mod.settings.servantGifts : mod.settings.servantFoods)) {
+				MSG.chat("使用道具 " + MSG.BLU(useItem.data.name))
+				mod.send('C_USE_ITEM', 3, {
+					gameId: mod.game.me.gameId,
+					id: useItem.id,
+					dbid: useItem.dbid,
+					target: 0n,
+					amount: 1,
+					dest: {x: 0, y: 0, z: 0},
+					loc: location.pos,
+					w: location.dir,
+					unk1: 0,
+					unk2: 0,
+					unk3: 0,
+					unk4: true
+				})
+			} else {
+				MSG.chat(MSG.RED("未找到对应道具 喂食/赠送"))
+			}
+		}
+	})
 }

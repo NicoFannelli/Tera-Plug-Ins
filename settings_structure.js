@@ -52,6 +52,19 @@ module.exports = [
         "step": 0.25
     },
     {
+        "key": "autoServant",
+        "name": "自动喂养 - 宠物/小跟班",
+        "type": "bool"
+    },
+    {
+        "key": "servantUseAt",
+        "name": "自动喂养 - 能量触发% (0-100%)",
+        "type": "number",
+        "min": 0.0,
+        "max": 100.0,
+        "step": 1
+    },
+    {
         "key": "vanguard",
         "name": "自动提交 - H/每日/每周奖励",
         "type": "bool"
@@ -196,4 +209,4 @@ module.exports = [
         "name": "打印 - 击杀怪物的 huntingZoneId_templateId",
         "type": "bool"
     }
-];
+]

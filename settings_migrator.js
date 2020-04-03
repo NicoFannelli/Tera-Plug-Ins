@@ -1,4 +1,8 @@
 const DefaultSettings = {
+    "autoServant": true,
+    "servantUseAt": 50,
+    "servantFoods": [206046, 206047, 206048],
+    "servantGifts": [206049, 206050, 206051],
     "shake": false,
     "power": 1.0,
     "speed": 1.0,
@@ -295,20 +299,20 @@ const DefaultSettings = {
     "spawnMotes": false,
     "findItemID": false,
     "findMonsterID": false
-};
+}
 
 module.exports = function MigrateSettings(from_ver, to_ver, settings) {
     if (from_ver === undefined) {
         // Migrate legacy config file
-        return Object.assign(Object.assign({}, DefaultSettings), settings);
+        return Object.assign(Object.assign({}, DefaultSettings), settings)
     } else if (from_ver === null) {
         // No config file exists, use default settings
-        return DefaultSettings;
+        return DefaultSettings
     } else {
         // Migrate from older version (using the new system) to latest one
         if (from_ver + 1 < to_ver) { // Recursively upgrade in one-version steps
-            settings = MigrateSettings(from_ver, from_ver + 1, settings);
-            return MigrateSettings(from_ver + 1, to_ver, settings);
+            settings = MigrateSettings(from_ver, from_ver + 1, settings)
+            return MigrateSettings(from_ver + 1, to_ver, settings)
         }
         // If we reach this point it's guaranteed that from_ver === to_ver - 1, so we can implement
         // a switch for each version step that upgrades to the next version. This enables us to
@@ -316,14 +320,14 @@ module.exports = function MigrateSettings(from_ver, to_ver, settings) {
         switch (to_ver) {
             default:
                 let oldsettings = settings
-                settings = Object.assign(DefaultSettings, {});
+                settings = Object.assign(DefaultSettings, {})
                 for (let option in oldsettings) {
                     if (settings[option]) {
                         settings[option] = oldsettings[option]
                     }
                 }
-                break;
+                break
         }
-        return settings;
+        return settings
     }
 }
