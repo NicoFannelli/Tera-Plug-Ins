@@ -1,8 +1,8 @@
 {
     "name": "Tera-Plug-Ins",
     "options": {
-        "niceName": "插件合集",
-        "guiName": "插件合集(Tera-Plug-Ins)",
+        "niceName": "Tera-Plug-Ins",
+        "guiName": "Tera-Plug-Ins(插件合集)",
         "settingsFile": "config.json",
         "settingsMigrator": "settings_migrator.js",
         "settingsVersion": 4
@@ -14,5 +14,5 @@
     "dependencies": {
         "tera-message": "https://raw.githubusercontent.com/tera-mod/tera-message/master/module.json"
     },
-    "version": "92.03"
+    "version": "92.04"
 }
