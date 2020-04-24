@@ -1,4 +1,4 @@
-Tera Qol Pack
+﻿Tera Qol Pack
 
 !pack
 !loot 
