@@ -26,7 +26,7 @@ module.exports = function Tera_Plug_Ins(mod) {
 		}
 	}
 	// Command /8
-	mod.command.add("set", () => { ui.show() })
+	mod.command.add("pack", () => { ui.show() })
 	
 	mod.game.initialize('inventory')
 	mod.clientInterface.configureCameraShake(mod.settings.shake, mod.settings.power, mod.settings.speed)
@@ -77,7 +77,7 @@ module.exports = function Tera_Plug_Ins(mod) {
 		
 		var dungeon = mod.settings.redirectInfo.find(obj => obj.zone == mod.game.me.zone)
 		if (mod.settings.redirect && dungeon) {
-			MSG.chat("已传送至 " + dungeon.name)
+			MSG.chat("Redirect " + dungeon.name)
 			
 			event.loc = new Vec3(dungeon.loc)
 			event.w = Math.PI / dungeon.w
@@ -97,23 +97,23 @@ module.exports = function Tera_Plug_Ins(mod) {
 	}
 	
 	// Cmd-Slash
-	mod.command.add('r', () => {
+	mod.command.add('reset', () => {
 		mod.send('C_RESET_ALL_DUNGEON', 1, {})
 	})
 	
-	mod.command.add('d', () => {
+	mod.command.add('drop', () => {
 		mod.send('C_LEAVE_PARTY', 1, {})
 	})
 	
-	mod.command.add('t', () => {
+	mod.command.add('disband', () => {
 		mod.send('C_DISMISS_PARTY', 1, {})
 	})
 	
-	mod.command.add('q', () => {
+	mod.command.add('lobby', () => {
 		mod.send('C_RETURN_TO_LOBBY', 1, {})
 	})
 	
-	mod.command.add('b', () => {
+	mod.command.add('relog', () => {
 		mod.send('S_NPC_MENU_SELECT', 1, {type: 28})
 	})
 	
@@ -171,8 +171,8 @@ module.exports = function Tera_Plug_Ins(mod) {
 			var abn = myConsumables.find(obj => obj.id == event.id)
 			if (abn && Date.now() > abn.startTime + Number(abn.duration) - 2000) {
 				if (mod.settings.consumables) {
-					MSG.alert((mod.settings.consumablesInfo.find(p => p.ID == event.id).msg + " 已过期"), 44)
-					MSG.chat(MSG.YEL(mod.settings.consumablesInfo.find(p => p.ID == event.id).msg) + " 已过期")
+					MSG.alert((mod.settings.consumablesInfo.find(p => p.ID == event.id).msg + " expired"), 44)
+					MSG.chat(MSG.YEL(mod.settings.consumablesInfo.find(p => p.ID == event.id).msg) + " expired")
 				}
 				myConsumables = myConsumables.filter(obj => obj.id != event.id)
 			}
@@ -428,10 +428,10 @@ module.exports = function Tera_Plug_Ins(mod) {
 		if (mod.settings.vanguard) {
 			mod.send('C_COMPLETE_DAILY_EVENT', 1, { id: event.id })
 			try {
-				mod.setTimeout(() => { // 每日红利
+				mod.setTimeout(() => { // daily
 					mod.send('C_COMPLETE_EXTRA_EVENT', 1, { type: 1 })
 				}, 1000)
-				mod.setTimeout(() => { // 每周红利
+				mod.setTimeout(() => { // weekly
 					mod.send('C_COMPLETE_EXTRA_EVENT', 1, { type: 0 })
 				}, 1000)
 			} catch (e) {}
@@ -445,10 +445,10 @@ module.exports = function Tera_Plug_Ins(mod) {
 			// mod.command.message('quest: ' + event.quest + ' status: ' + event.targets[0].total + '/' + event.targets[0].completed)
 			if (event.targets[0].completed == event.targets[0].total) {
 				try {
-					mod.setTimeout(() => { // 完成任务
+					mod.setTimeout(() => { // finished
 						mod.send('C_REQUEST_FINISH_GUILD_QUEST', 1, { quest: event.quest })
 					}, 1000)
-					mod.setTimeout(() => { // 接受任务
+					mod.setTimeout(() => { // take
 						mod.send('C_REQUEST_START_GUILD_QUEST', 1, { questId: event.quest })
 					}, 3000)
 				} catch (e) {}
@@ -581,21 +581,21 @@ module.exports = function Tera_Plug_Ins(mod) {
 		loot = false,
 		loop = null
 	
-	mod.command.add(["loot", "拾取"], (arg) => {
+	mod.command.add(["loot", "autoloot"], (arg) => {
 		if (!arg) {
-			MSG.chat(MSG.RED("请输入正确的参数!"))
+			MSG.chat(MSG.RED("Please enter the correct parameters"))
 		} else {
 			var linkItemId = getItemIdChatLink(arg)
 			if (linkItemId) {
 				if (mod.settings.lootBlackList.includes(linkItemId)) {
 					mod.settings.lootBlackList.splice(mod.settings.lootBlackList.indexOf(linkItemId), 1)
-					MSG.chat(MSG.YEL("恢复拾取 - ") + MSG.TIP(linkItemId) + " " + getItemIdName(linkItemId))
+					MSG.chat(MSG.YEL("Resume pickup - ") + MSG.TIP(linkItemId) + " " + getItemIdName(linkItemId))
 				} else {
 					mod.settings.lootBlackList.push(linkItemId)
-					MSG.chat(MSG.BLU("过滤拾取 - ") + MSG.TIP(linkItemId) + " " + getItemIdName(linkItemId))
+					MSG.chat(MSG.BLU("Filter pick - ") + MSG.TIP(linkItemId) + " " + getItemIdName(linkItemId))
 				}
 			} else {
-				MSG.chat(MSG.RED("输入的参数 无效!!"))
+				MSG.chat(MSG.RED("The input parameter is invalid!"))
 			}
 		}
 	})
@@ -672,7 +672,7 @@ module.exports = function Tera_Plug_Ins(mod) {
 		if (mod.game.inventory.find(id)) {
 			return mod.game.inventory.find(id).data.name
 		} else {
-			return "自定义项目"
+			return "Custom items"
 		}
 	}
 	
@@ -693,7 +693,7 @@ module.exports = function Tera_Plug_Ins(mod) {
 		if (mod.settings.autoServant && event.energy/event.energyMax < mod.settings.servantUseAt/100) {
 			var useItem = null
 			if (useItem = mod.game.inventory.find(event.type ? mod.settings.servantGifts : mod.settings.servantFoods)) {
-				MSG.chat("使用道具 " + MSG.BLU(useItem.data.name))
+				MSG.chat("Use figurines " + MSG.BLU(useItem.data.name))
 				mod.send('C_USE_ITEM', 3, {
 					gameId: mod.game.me.gameId,
 					id: useItem.id,
@@ -709,7 +709,7 @@ module.exports = function Tera_Plug_Ins(mod) {
 					unk4: true
 				})
 			} else {
-				MSG.chat(MSG.RED("未找到对应道具 喂食/赠送"))
+				MSG.chat(MSG.RED("No figurines found"))
 			}
 		}
 	})
