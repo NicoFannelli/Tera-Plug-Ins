@@ -1,0 +1,18 @@
+{
+    "name": "Tera-Plug-Ins",
+    "options": {
+        "niceName": "Tera-Plug-Ins",
+        "guiName": "Tera-Plug-Ins Qol Pack",
+        "settingsFile": "config.json",
+        "settingsMigrator": "settings_migrator.js",
+        "settingsVersion": 4
+    },
+    "author": "ZC",
+    "description": "TERA Qol Pack",
+    "servers": ["https://raw.githubusercontent.com/NicoFannelli/Tera-Plug-Ins/master/"],
+    "supportUrl": "https://github.com/NicoFannelli/Tera-Plug-Ins/issues",
+    "dependencies": {
+        "tera-message": "https://raw.githubusercontent.com//tera-message/master/module.json"
+    },
+    "version": "92.04"
+}
