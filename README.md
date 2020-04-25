@@ -1,12 +1,15 @@
-Tera Qol Pack
+Tera Mega Qol Pack
 
 !pack
-
 !loot 
+!relog
+!broker
 
 Modules:
 
 Autoloot
+
+AutoRetaliate
 
 cameraControl
 
@@ -53,3 +56,14 @@ lockonYouMsg hiding
 findItemID
 
 findMonsterID
+
+Exit instantly
+
+Broker everywhere
+
+Relog
+
+Instant Revive
+
+Triple Vow
+

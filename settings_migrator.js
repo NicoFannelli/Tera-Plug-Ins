@@ -7,6 +7,11 @@ const DefaultSettings = {
     "power": 1.0,
     "speed": 1.0,
     "autoLoot": true,
+	 "revive": true,
+    "party": false,
+    "drama": false,
+	"exit": true,
+	"retaliate": true,
     "lootBlack": true,
     "lootBlackList": [
         7214, // 复活卷轴
@@ -65,7 +70,7 @@ const DefaultSettings = {
     "loopInterval": 350,
     "flyMore": true,
     "unLockFlying": true,
-    "redirect": true,
+    "redirect": false,
     "redirectInfo": [
         // {zone: 9716, loc: [  49504, 129121, 3722], w: -2,   name: "飞艇下级 - 尾王"},
         // {zone: 9777, loc: [-112673, -34856,  470], w:  2,   name: "古代地下水道 - 尾王"},

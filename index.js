@@ -87,6 +87,112 @@ module.exports = function Tera_Plug_Ins(mod) {
 		}
 	})
 	
+	
+//TRIPLE VOW	
+/*	
+	const HOOK_OPT = {order: 10, filter: {fake: null}},
+	CLASS_MYSTIC = 7,
+	SKILL_VOW_LOCKON = {type: 1, id: 120100},
+	GLYPH_MULTIPLY = 27090
+	
+		let extraTarget = false,
+			locked = []
+
+		mod.hook('S_CREST_INFO', 2, HOOK_OPT, event => {
+			const crest = event.crests.find(c => c.id === GLYPH_MULTIPLY)
+			extraTarget = !!crest && crest.enable
+		});
+
+		mod.hook('S_CREST_APPLY', 2, HOOK_OPT, event => { if(event.id === GLYPH_MULTIPLY) extraTarget = event.enable });
+
+		mod.hook('S_CAN_LOCKON_TARGET', 3, HOOK_OPT, event => {
+			if(event.skill.equals(SKILL_VOW_LOCKON) && event.success) {
+				if(locked.length >= (!extraTarget ? 2 : 3) || locked.some(id => id === event.target)) {
+					event.success = false
+					return true
+				}
+
+				locked.push(event.target)
+
+				if(locked.length === (!extraTarget ? 1 : 2)) {
+					event.success = false
+					return true
+				}
+			}
+		});
+
+		mod.hook('S_ACTION_END', 5, HOOK_OPT, event => {
+			if(event.gameId === gameId && event.skill.equals(SKILL_VOW_LOCKON)) locked = []
+		});
+
+		mod.hook('S_CREATURE_LIFE', 3, HOOK_OPT, event => { if(event.gameId === gameId && !event.alive) locked = [] })	;
+	
+*/	
+	
+//Retaliate
+
+      let w,
+          loc,
+          dest,
+          job,
+		  gameId = -0n,
+          templateId;
+
+let RETALIATE = {
+  reserved: 0,
+  npc: false,
+  type: 1,
+  huntingZoneId: 0,
+  id: 0
+},
+
+RETALIATE_IDs = [
+  131000, // Warrior
+  111000, // Lancer
+  101000, // Slayer
+  103000, // Berserker
+  141000, // Sorcerer
+  141000, // Archer
+  251000, // Priest
+  211000, // Mystic
+  140300, // Reaper
+  201000, // Gunner
+  121000, // Brawler
+  101000, // Ninja
+  181099, // Valkyrie
+];
+
+mod.hook('S_LOGIN', 14, (event) => {
+      job = (event.templateId - 10101) % 100;
+      RETALIATE.id = RETALIATE_IDs[job];
+      templateId = event.templateId;
+  });
+
+  mod.hook('C_PLAYER_LOCATION', 5, (event) => {
+      w = event.w;
+      loc = event.loc;
+      dest = event.dest;
+  });
+
+  mod.hook('S_EACH_SKILL_RESULT', 14, (event) => {
+      if (mod.settings.retaliate || event.reaction.skill.id !== (templateId * 100) + 2)
+          return;
+
+      mod.send('C_START_SKILL', 7, {
+              skill: RETALIATE,
+              w: w,
+              loc: loc,
+              dest: dest,
+              unk: true,
+              moving: false,
+              cont: false,
+              target: 0,
+              unk2: false
+          }
+      );
+  });
+
+	
 	// Camera-Control
 	function setCamera(distance) {
 		mod.send('S_DUNGEON_CAMERA_SET', 1, {
@@ -95,6 +201,187 @@ module.exports = function Tera_Plug_Ins(mod) {
 			max: distance
 		})
 	}
+	
+	//Exit
+mod.hook('S_PREPARE_EXIT', 1, event => {
+  if (!mod.settings.exit) return;
+  mod.send('S_EXIT', 3, {
+      category: 0,
+      code: 0
+  });
+});
+	
+//Relog
+ 
+ let characters = [];
+ let position = -1;
+
+mod.command.add('relog', arg => {
+  if (!mod.game.me.alive) {
+    sendMessage(`isn't state you can relog`)
+    return
+  }
+
+  if (arg === 'nx') {
+    if (++position > characters.length)
+      position = 1
+  } else if (/^\d+$/.test(arg)) {
+    const nextPosition = Number(arg)
+    if (nextPosition > characters.length)
+      return sendMessage(`Not found ${nextPosition}th character`)
+    else
+      position = nextPosition
+  } else {
+    const found = characters.find(char => char.name.toLowerCase() === arg.toLowerCase())
+    if (found)
+      position = found.position
+    else
+      return sendMessage(`Not found '${arg}'`)
+  }
+
+  relog()
+})
+
+mod.hook('S_GET_USER_LIST', 17, event => {
+  characters = event.characters
+})
+mod.hook('C_SELECT_USER', 1, event => {
+  position = characters.find(char => char.id === event.id).position
+})
+function relog() {
+  mod.send('C_RETURN_TO_LOBBY', 1, {})
+  let prepareLobbyHook, lobbyHook
+  prepareLobbyHook = mod.hookOnce('S_PREPARE_RETURN_TO_LOBBY', 1, () => {
+    mod.send('S_RETURN_TO_LOBBY', 1, {})
+    lobbyHook = mod.hookOnce('S_RETURN_TO_LOBBY', 1, () => {
+      setImmediate(() => {
+        mod.send('C_SELECT_USER', 1, { id: characters.find(char => char.position === position).id })
+      })
+    })
+  })
+  setTimeout(() => {
+    for (const hook of [prepareLobbyHook, lobbyHook])
+      if (hook)
+        mod.unhook(hook)
+  }, 16000)
+}
+	
+	
+//Revive
+
+mod.hook('S_CREATURE_LIFE', 3, {order: 9999}, ({gameId, alive, loc})=>{
+  if(mod.settings.revive)
+  {
+    const member = mod.settings.party ? (partyMembers.find((memb) => memb.gameId === gameId)) : null;
+    if (!member && gameId !== mod.game.me.gameId) return;
+    
+    if(!alive)
+    {
+      isDead[gameId] = true;
+      if(gameId === mod.game.me.gameId) { setTimeout(clearMyBuffs, 280);} // fix for bugged CC skills?
+      if(mod.settings.drama)
+      {
+        setTimeout(fakeDeath, 300, gameId, loc, 0);
+        setTimeout(fakeDeath, 5000, gameId, loc, 1);
+      }
+      else
+      {
+        fakeDeath(gameId, loc, 1);
+        setTimeout(fakeDeath, 300, gameId, loc, 1); // in case player was moving\using skills during death
+        setTimeout(fakeDeath, 2000, gameId, loc, 1);
+        setTimeout(fakeDeath, 4000, gameId, loc, 1);
+      }
+      return false; // we wont't have to waste time reviving if we don't die
+    }
+    else
+    {
+      fakeDeathEnd(gameId, loc);
+      isDead[gameId] = false;
+    }
+  }
+});
+
+/*
+mod.hook('S_PARTY_MEMBER_LIST', 7, ({members}) => {
+  partyMembers = members;
+});
+*/
+
+mod.hook('S_LEAVE_PARTY_MEMBER', 2, ({playerId}) => {
+  const mpos = partyMembers.findIndex((memb) => memb.playerId === playerId);
+  if (mpos === -1) return;
+  
+  delete isDead[partyMembers[mpos].gameId];
+  partyMembers.splice(mpos, 1);
+});
+
+mod.hook('S_LEAVE_PARTY', 1, () => {
+  partyMembers.length = 0;
+})
+
+function fakeDeath(Id, Loc, Stage)
+{
+  if(isDead[Id])
+  {
+    mod.send('S_ACTION_STAGE', 9, {	
+      gameId: Id,
+      templateId: 11006,
+      speed: 1,
+      projectileSpeed: 1,
+      stage: Stage,
+      id: 9999999,
+      effectScale: 1,
+      dest: Loc,
+      loc: Loc,
+      skill: {
+        reserved: 0,
+        npc: false,
+        type: 1,
+        huntingZoneId: 0,
+        id: 70300
+      }});
+    if(Stage === 1)
+    {
+      mod.toClient('S_INSTANT_MOVE', 3, {
+        gameId: Id,
+        loc: Loc
+      });
+    }
+  }
+}
+
+function fakeDeathEnd(Id, Loc)
+{
+  mod.send('S_ACTION_END', 5, {	
+    gameId: Id,
+    templateId: 11006,
+    type: 25,
+    id: 9999999,
+    loc: Loc,
+    skill: {
+      reserved: 0,
+      npc: false,
+      type: 1,
+      huntingZoneId: 0,
+      id: 70300
+    }});
+}
+
+function clearMyBuffs()
+{
+  if(mod.game.me.abnormalities && isDead[mod.game.me.gameId])
+  {
+    Object.values(mod.game.me.abnormalities).forEach(abnormality => {
+      mod.toClient('S_ABNORMALITY_END', 1, {
+        target: mod.game.me.gameId,
+        id: abnormality.id
+      });
+      command.message("Cleared abnormality " + abnormality.id)
+    });
+  }
+}
+	
+	
 	
 	// Cmd-Slash
 	mod.command.add('reset', () => {
@@ -113,7 +400,7 @@ module.exports = function Tera_Plug_Ins(mod) {
 		mod.send('C_RETURN_TO_LOBBY', 1, {})
 	})
 	
-	mod.command.add('relog', () => {
+	mod.command.add('broker', () => {
 		mod.send('S_NPC_MENU_SELECT', 1, {type: 28})
 	})
 	

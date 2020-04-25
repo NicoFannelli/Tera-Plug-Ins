@@ -1,14 +1,15 @@
 {
-    "name": "Tera-Plug-Ins",
+    "disableAutoUpdate": true,
+    "name": "Tera-Pack",
     "options": {
-        "niceName": "Tera-Plug-Ins",
-        "guiName": "Tera-Plug-Ins Qol Pack",
+        "niceName": "Tera-Pack",
+        "guiName": "Tera Mega Qol Pack",
         "settingsFile": "config.json",
         "settingsMigrator": "settings_migrator.js",
         "settingsVersion": 4
     },
-    "author": "ZC",
-    "description": "TERA Qol Pack",
+    "author": "Nico Fannelli",
+    "description": "TERA Mega Qol Pack",
     "servers": ["https://raw.githubusercontent.com/NicoFannelli/Tera-Plug-Ins/master/"],
     "supportUrl": "https://github.com/NicoFannelli/Tera-Plug-Ins/issues",
     "dependencies": {
