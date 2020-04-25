@@ -211,7 +211,7 @@ module.exports = [
     },
     {
         "key": "spawnNPC",
-        "name": "Shield-Elemental Summon Ninja Log Sentinel Tower Robot Shadow?",
+        "name": "Hide NPCS (thralls, etc)",
         "type": "bool"
     },
     {
